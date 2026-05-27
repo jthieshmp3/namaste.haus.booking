@@ -1815,6 +1815,12 @@ textarea {
     height: 250px !important;
   }
   
+  /* Scale down huge hero typography on mobile to prevent layout breaks */
+  .t-hero {
+    font-size: clamp(32px, 8vw, 44px) !important;
+    line-height: 1.15 !important;
+  }
+  
   .main-container {
     padding: 40px 16px 120px; /* spacing for bottom fixed bar */
   }
