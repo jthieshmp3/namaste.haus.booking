@@ -389,8 +389,8 @@ textarea {
 }
 
 #splash-logo {
-  height: 280px;
-  width: 280px;
+  height: 200px;
+  width: 200px;
   border-radius: 50%;
   object-fit: cover;
   box-shadow: var(--shadow-md);
@@ -1802,6 +1802,17 @@ textarea {
 @media (max-width: 768px) {
   .header-minimal {
     padding: 16px 24px;
+  }
+  
+  /* Enlarge logos on mobile for grander brand entrance */
+  .intro-logo {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  
+  #splash-logo {
+    width: 250px !important;
+    height: 250px !important;
   }
   
   .main-container {
