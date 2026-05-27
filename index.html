@@ -407,16 +407,16 @@
        ════════════════════════════════════════ 
   -->
   
-  <!-- Fixed Bottom Action Bar -->
-  <div class="mobile-cart-fixed-bar" id="mobile-cart-sticky-bar">
-    <div class="mobile-cart-bar-info" onclick="expandMobileCartDrawer()">
-      <span class="items" id="mobile-cart-items-count-label">0 Services Selected</span>
-      <span class="amt" id="mobile-cart-total-label">MYR 0</span>
-    </div>
-    <button type="button" class="btn-primary" id="mobile-cart-continue-btn" disabled onclick="navigateToNextStep()" style="padding: 12px 24px; font-size: 11px;">
-      Continue <i class="fa-solid fa-arrow-right"></i>
-    </button>
-  </div>
+  <!-- Mobile Floating Basket Button (Bottom Left) -->
+  <button type="button" class="mobile-basket-btn" id="mobile-basket-btn-node" style="display: none;" onclick="expandMobileCartDrawer()">
+    <i class="fa-solid fa-shopping-basket"></i>
+    <span class="basket-badge" id="mobile-basket-count-badge" style="display: none;">0</span>
+  </button>
+  
+  <!-- Mobile Floating Continue Button (Bottom Right) -->
+  <button type="button" class="mobile-continue-btn" id="mobile-continue-btn-node" style="display: none;" disabled onclick="navigateToNextStep()">
+    <i class="fa-solid fa-arrow-right"></i>
+  </button>
   
   <!-- Backdrop overlay and slide drawer -->
   <div class="mobile-cart-drawer-overlay" id="mobile-cart-drawer-overlay-node" onclick="collapseMobileCartDrawer()"></div>
