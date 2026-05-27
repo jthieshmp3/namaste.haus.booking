@@ -216,7 +216,7 @@ function initApp() {
           showStep(1);
         }
       });
-    }, 2800);
+    }, 4000);
   }
 
   // Set default payment method to Pay at Salon
