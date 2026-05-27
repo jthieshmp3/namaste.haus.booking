@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Namaste. Haus — Premium Booking System</title>
+  
+  <!-- Modern Typography Fonts Loader -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@200;300;400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for clean UI elements -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Standard Booking Sheet styles -->
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- GSAP Core & Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+  
+  <!-- canvas-confetti trigger library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  
+  <!-- Google tag (gtag.js) for GA4 Event Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════
+       PAGE 0 — SPLASH SCREEN CURTAIN OVERLAY
+       ════════════════════════════════════════ -->
+  <div id="splash-screen">
+    <img id="splash-logo" src="assets/logo.png" alt="Namaste. Haus Logo">
+    <p class="splash-tagline">Beyond Nails</p>
+  </div>
+
+  <!-- Minimal Header (Shows starting Step 1) -->
+  <header class="header-minimal" style="display: none;">
+    <div class="header-logo-group">
+      <img src="assets/logo.png" alt="Namaste. Haus Circular Logo">
+      <span>Namaste. Haus</span>
+    </div>
+    <!-- Store Status Badge with Green Pulsing Dot -->
+    <div class="status-badge" id="live-status-badge">
+      <span class="status-dot" id="live-status-dot"></span>
+      <span id="live-status-text">Checking status...</span>
+    </div>
+  </header>
+
+  <!-- 
+       ════════════════════════════════════════
+       PAGE 1 — ENTRY SCREEN (Appointment Selection)
+       ════════════════════════════════════════ 
+  -->
+  <section id="step-1" class="entry-split-layout" style="display: none;">
+    <!-- Left Split Column: Centered Portrait Hero with Blurred Underlay -->
+    <div class="entry-image-panel">
+      <div class="hero-image-blur-underlay" style="background-image: url('assets/photo-1.jpg');"></div>
+      <img id="entry-hero-image" src="assets/photo-1.jpg" alt="Namaste. Haus Interior">
+      <div class="entry-gradient-overlay"></div>
+    </div>
+    
+    <!-- Right Split Column: Clean editorial content selection -->
+    <div class="entry-content-panel">
+      <div class="logo-wrapper" style="margin-bottom: 16px;">
+        <img src="assets/logo.png" alt="Namaste. Haus Emblem" class="intro-logo">
+      </div>
+      
+      <span class="t-label" style="opacity: 0;">Welcome to</span>
+      <h1 class="t-hero" style="opacity: 0;">Namaste. Haus</h1>
+      <p class="t-editorial" style="opacity: 0;">Your next chapter starts here.</p>
+      
+      <div class="social-proof-strip" style="opacity: 0; margin-top: 4px;">
+        <div class="social-strip">
+          <span style="color: #D4C5A4;"><i class="fa-solid fa-star"></i> 4.8</span>
+          <span>·</span>
+          <span>"200+ happy clients"</span>
+        </div>
+      </div>
+      
+      <div class="entry-options-stack" style="opacity: 0;">
+        <!-- Card 1: Book Self -->
+        <div class="option-selection-card" onclick="selectAppointmentType('individual')">
+          <div class="option-icon-wrapper">
+            <i class="fa-solid fa-spa"></i>
+          </div>
+          <div class="option-card-body">
+            <h3>Book for Yourself</h3>
+            <p>Schedule your custom session</p>
+          </div>
+        </div>
+        
+        <!-- Card 2: Book Group -->
+        <div class="option-selection-card" onclick="selectAppointmentType('group')">
+          <div class="option-icon-wrapper">
+            <i class="fa-solid fa-user-group"></i>
+          </div>
+          <div class="option-card-body">
+            <h3>Book as a Group</h3>
+            <p>For yourself and others</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 
+       ════════════════════════════════════════
+       MAIN WIZARD CONTAINER (Steps 2 to 5)
+       ════════════════════════════════════════
+  -->
+  <main class="main-container" id="main-wizard-container" style="display: none;">
+    <div class="wizard-layout">
+      
+      <!-- LEFT COLUMN: Booking Step Content (60%) -->
+      <div class="wizard-flow-col">
+        
+        <!-- ════════════════════════════════════════
+             PAGE 2 — SERVICES LIST
+             ════════════════════════════════════════ -->
+        <div id="step-2" class="step-container" style="display: none;">
+          <span class="t-label step-tag">STEP 01</span>
+          <h2 class="t-heading step-title">Select Your Services</h2>
+          <p class="t-editorial step-editorial">Every set is a story.</p>
+          
+          <!-- Group Guest Manager Container -->
+          <div id="group-participant-manager-row"></div>
+          
+          <!-- Category Tabs Horizontal Row -->
+          <div class="categories-tabs-scroll" id="categories-tabs-row">
+            <!-- Dynamically injected category pill tabs -->
+          </div>
+          
+          <!-- Services Listing Area -->
+          <div class="services-list" id="services-grid-list">
+            <!-- Dynamically injected service item cards -->
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════
+             PAGE 3 — SELECT PROFESSIONAL
+             ════════════════════════════════════════ -->
+        <div id="step-3" class="step-container" style="display: none;">
+          <span class="t-label step-tag">STEP 02</span>
+          <h2 class="t-heading step-title">Choose Your Professional</h2>
+          <p class="t-editorial step-editorial">In good hands — literally.</p>
+          
+          <!-- Professional Grid -->
+          <div class="staff-cards-grid" id="staff-grid-list">
+            <!-- Dynamically injected professional cards -->
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════
+             PAGE 4 — SELECT DATE & TIME
+             ════════════════════════════════════════ -->
+        <div id="step-4" class="step-container" style="display: none; position: relative;">
+          <!-- Parallax out-of-focus background -->
+          <div class="parallax-bg-decorative" id="calendar-parallax-bg" style="background-image: url('assets/photo-3.jpg');"></div>
+          
+          <span class="t-label step-tag">STEP 03</span>
+          <h2 class="t-heading step-title">Pick Your Moment</h2>
+          <p class="t-editorial step-editorial">Choose your time. We'll take care of the rest.</p>
+          
+          <div class="date-time-layout-wrapper">
+            <!-- Calendar Node Card -->
+            <div class="calendar-monthly-card">
+              <div class="calendar-header-bar">
+                <button type="button" class="calendar-nav-btn" onclick="prevMonth()"><i class="fa-solid fa-chevron-left"></i></button>
+                <h3 id="calendar-month-year-label">Month Year</h3>
+                <button type="button" class="calendar-nav-btn" onclick="nextMonth()"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+              
+              <div class="calendar-days-week-row">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+              </div>
+              
+              <div class="calendar-days-grid" id="calendar-days-grid-nodes">
+                <!-- Dynamically rendered day cell nodes -->
+              </div>
+            </div>
+            
+            <!-- Time Grid slots card -->
+            <div class="time-slots-container-card" id="time-slots-section" style="display: none;">
+              <div class="time-slots-title-row">
+                <span class="t-label">Available Slots</span>
+              </div>
+              <div class="time-slots-grid" id="time-slots-grid-nodes">
+                <!-- Dynamically rendered time slot cards -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════
+             PAGE 5 — REVIEW & PAYMENT SCREEN
+             ════════════════════════════════════════ -->
+        <div id="step-5" class="step-container" style="display: none;">
+          <span class="t-label step-tag">STEP 04</span>
+          <h2 class="t-heading step-title">Review Your Booking</h2>
+          <p class="t-editorial step-editorial">Almost there — your Namaste. moment awaits.</p>
+          
+          <!-- Booking details card -->
+          <div class="review-summary-card" id="review-summary-rows-block">
+            <!-- Dynamically populated summary rows -->
+          </div>
+          
+          <!-- Customer Details form -->
+          <form id="customer-checkout-details-form" class="review-details-form" onsubmit="event.preventDefault();" style="margin-top: 32px;">
+            <span class="t-label">Your Details</span>
+            
+            <!-- Full Name field -->
+            <div class="form-group-validated">
+              <label for="input-full-name">Full Name *</label>
+              <div class="input-validated-wrapper" id="name-input-wrapper">
+                <input type="text" id="input-full-name" placeholder="E.g. Sophia Tan" required oninput="validateInputName()">
+                <i class="input-validation-icon" id="name-validation-icon"></i>
+              </div>
+              <span class="validation-error-msg" id="name-error-msg" style="display: none;">Name must be at least 2 characters.</span>
+            </div>
+            
+            <!-- Email Address field -->
+            <div class="form-group-validated">
+              <label for="input-email">Email Address *</label>
+              <div class="input-validated-wrapper" id="email-input-wrapper">
+                <input type="email" id="input-email" placeholder="E.g. sophia@example.com" required onblur="validateInputEmail()">
+                <i class="input-validation-icon" id="email-validation-icon"></i>
+              </div>
+              <span class="validation-error-msg" id="email-error-msg" style="display: none;">Please enter a valid email address.</span>
+            </div>
+            
+            <!-- Phone Number field -->
+            <div class="form-group-validated">
+              <label for="input-phone">Phone Number *</label>
+              <div class="input-validated-wrapper" id="phone-input-wrapper">
+                <input type="tel" id="input-phone" placeholder="E.g. +60123456789" required onblur="validateInputPhone()">
+                <i class="input-validation-icon" id="phone-validation-icon"></i>
+              </div>
+              <span class="validation-error-msg" id="phone-error-msg" style="display: none;">Must start with +60 or 01.</span>
+            </div>
+            
+            <!-- Special Requests text field -->
+            <div class="form-group-validated">
+              <label for="input-requests">Special Requests (Optional)</label>
+              <textarea id="input-requests" rows="3" placeholder="Nail length, shape preference, allergies..."></textarea>
+            </div>
+          </form>
+          
+          <!-- Clock Cancellation banner card -->
+          <div class="cancellation-policy-card">
+            <span class="cancellation-icon"><i class="fa-solid fa-clock"></i></span>
+            <p class="cancellation-text">
+              Please cancel at least 48 hours before your appointment. Late cancellations may forfeit deposit.
+            </p>
+          </div>
+          
+          <!-- Payment Selection Method block -->
+          <div class="payment-method-container" style="margin-top: 32px;">
+            <span class="t-label">Payment Method</span>
+            <div style="background: #FAFAFA; border: 1.5px solid #C8BEAF; border-radius: 12px; padding: 24px; display: flex; gap: 16px; align-items: flex-start; margin-top: 12px;">
+              <span style="font-size: 24px; color: #2D5C3E; padding-top: 2px;"><i class="fa-solid fa-store"></i></span>
+              <div>
+                <h4 style="font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: #2A2A2A; margin: 0 0 6px 0;">Pay at Salon</h4>
+                <p style="font-size: 13px; color: #8A8070; line-height: 1.5; margin: 0;">
+                  No pre-payment is required! You can complete your payment via Credit Card, Cash, or QR code at the studio counter after your relaxing treatments.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Confirm Primary CTA -->
+          <div class="confirm-cta-row" style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px;">
+            <button type="button" class="btn-primary" id="confirm-booking-btn" disabled onclick="handleConfirmBookingSubmit()">
+              Confirm My Booking
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Sticky Checkout Cart (40%) -->
+      <aside class="cart-column-col">
+        <div class="cart-preview-panel">
+          
+          <div class="cart-header">
+            <h2>Your Booking</h2>
+            <p class="addr"><i class="fa-solid fa-location-dot"></i> 3 Jalan Chin Chin, Pudu, KL</p>
+          </div>
+          
+          <div class="cart-divider"></div>
+          
+          <!-- Selected List items container -->
+          <div class="cart-items-wrapper" id="cart-selected-items-node">
+            <!-- Dynamic elements injected here -->
+          </div>
+          
+          <div class="cart-divider"></div>
+          
+          <!-- Promo Code line row -->
+          <div class="cart-promo-container" id="cart-promo-input-section" style="display: none;">
+            <div class="promo-input-row">
+              <input type="text" id="promo-code-input" placeholder="PROMO CODE" style="text-transform: uppercase;">
+              <button type="button" class="btn-ghost" onclick="applyPromoCodeInput()">Apply</button>
+            </div>
+            <span class="promo-feedback-text" id="promo-feedback-text-node" style="display: none;">Feedback message</span>
+          </div>
+          
+          <!-- Total Price line rows -->
+          <div class="cart-summary-block">
+            <!-- Discounts details rows -->
+            <div id="cart-summary-discounts-row" style="display: none; justify-content: space-between; font-size: 13px; color: var(--green); margin-bottom: 8px;">
+              <span>Discount</span>
+              <span id="cart-summary-discounts-value">-MYR 0.00</span>
+            </div>
+            
+            <div class="total-summary-row">
+              <span class="label">Total Price</span>
+              <span class="val" id="cart-total-price-label">MYR 0</span>
+            </div>
+            <span class="discounts-toggle-link" id="promo-codes-toggle-link" onclick="togglePromoInputField()">Discounts & Referrals</span>
+          </div>
+          
+          <!-- Navigation Continue button -->
+          <button type="button" class="btn-primary" id="cart-continue-navigation-btn" disabled onclick="navigateToNextStep()">
+            Continue <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- 
+       ════════════════════════════════════════
+       PAGE 6 — BOOKING CONFIRMED ( takeover screen )
+       ════════════════════════════════════════ 
+  -->
+  <section id="step-6" class="confirmation-screen-takeover" style="display: none;">
+    <!-- Parallax soft background visual -->
+    <div class="parallax-bg-decorative" id="confirmation-parallax-bg" style="background-image: url('assets/photo-2.jpg'); opacity: 0.08;"></div>
+    
+    <!-- Path animation logo logo -->
+    <svg class="confirmation-logo-svg" viewBox="0 0 100 100" id="confirm-logo">
+      <circle cx="50" cy="50" r="45"></circle>
+      <path d="M30 52 L45 65 L70 35" id="confirm-check-path"></path>
+    </svg>
+    
+    <h1 class="t-heading" id="confirmation-heading-label" style="font-size: clamp(40px, 6vw, 72px); margin-bottom: 8px;">
+      See you soon, Sophia! ✨
+    </h1>
+    
+    <div class="confirmation-booking-id-tag" id="confirmation-booking-id-label">
+      Booking confirmed · NH-20260527-001
+    </div>
+    
+    <p class="t-editorial" id="confirmation-sub-text" style="max-width: 480px; margin: 16px 0 24px;">
+      Your confirmation is on its way to sophia@example.com. We can't wait to take care of you.
+    </p>
+    
+    <!-- Receipt summary card -->
+    <div class="confirmation-details-summary-card">
+      <div class="confirmation-details-row">
+        <span class="lbl">Services</span>
+        <span class="val" id="confirm-summary-services">Gel Manicure</span>
+      </div>
+      <div class="confirmation-details-row">
+        <span class="lbl">Staff</span>
+        <span class="val" id="confirm-summary-staff">Livia</span>
+      </div>
+      <div class="confirmation-details-row">
+        <span class="lbl">Date & Time</span>
+        <span class="val" id="confirm-summary-datetime">Wednesday, May 27 at 10:30 AM</span>
+      </div>
+      <div class="confirmation-details-row">
+        <span class="lbl">Total to be paid</span>
+        <span class="val" id="confirm-summary-total" style="color: var(--green); font-weight: bold;">MYR 118</span>
+      </div>
+    </div>
+    
+    <!-- Buttons rows -->
+    <div class="confirmation-actions-row">
+      <a href="https://maps.google.com/?q=3+Jalan+Chin+Chin+Pudu+KL" target="_blank" class="btn-primary">
+        <i class="fa-solid fa-map-location-dot"></i> View on Google Maps
+      </a>
+      <button type="button" class="btn-ghost" onclick="shareBookingWithFriend()">
+        <i class="fa-solid fa-share-nodes"></i> Share with a friend
+      </button>
+    </div>
+    
+    <div class="confirmation-social-strip">
+      <i class="fa-brands fa-instagram"></i> Follow us @namaste.haus
+    </div>
+  </section>
+
+  <!-- 
+       ════════════════════════════════════════
+       MOBILE NAVIGATION ELEMENTS & BOTTOM BAR
+       ════════════════════════════════════════ 
+  -->
+  
+  <!-- Fixed Bottom Action Bar -->
+  <div class="mobile-cart-fixed-bar" id="mobile-cart-sticky-bar">
+    <div class="mobile-cart-bar-info" onclick="expandMobileCartDrawer()">
+      <span class="items" id="mobile-cart-items-count-label">0 Services Selected</span>
+      <span class="amt" id="mobile-cart-total-label">MYR 0</span>
+    </div>
+    <button type="button" class="btn-primary" id="mobile-cart-continue-btn" disabled onclick="navigateToNextStep()" style="padding: 12px 24px; font-size: 11px;">
+      Continue <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+  
+  <!-- Backdrop overlay and slide drawer -->
+  <div class="mobile-cart-drawer-overlay" id="mobile-cart-drawer-overlay-node" onclick="collapseMobileCartDrawer()"></div>
+  <div class="mobile-cart-drawer" id="mobile-cart-drawer-node">
+    <div class="mobile-cart-drawer-header">
+      <h3 style="font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 500;">Your Selection</h3>
+      <button type="button" class="mobile-cart-drawer-close-btn" onclick="collapseMobileCartDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    
+    <!-- Dynamic drawer clone content -->
+    <div id="mobile-drawer-cloned-cart-items">
+      <!-- Clone items injected here -->
+    </div>
+    
+    <div class="cart-divider" style="margin: 16px 0;"></div>
+    
+    <!-- Clone promo form -->
+    <div id="mobile-drawer-cloned-promo-section">
+      <!-- Clone promo injected here -->
+    </div>
+    
+    <div class="cart-divider" style="margin: 16px 0;"></div>
+    
+    <div class="mobile-drawer-price-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+      <span style="font-family: 'Raleway', sans-serif; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;">Total</span>
+      <span style="font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--green-dark);" id="mobile-drawer-total-label">MYR 0</span>
+    </div>
+    
+    <button type="button" class="btn-primary" style="width: 100%;" id="mobile-drawer-action-btn" onclick="collapseMobileCartDrawer(); navigateToNextStep();">
+      Continue
+    </button>
+  </div>
+
+  <!-- Biography & Reviews Slide-Up Modal Popover -->
+  <div class="bio-modal-overlay" id="bio-popover-overlay" onclick="closeBioPopoverModal()">
+    <div class="bio-modal-card" onclick="event.stopPropagation()">
+      <button type="button" class="bio-modal-close-btn" onclick="closeBioPopoverModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="bio-modal-photo-banner" id="bio-modal-photo-banner-node">
+        <img src="assets/staff-livia.jpg" alt="Professional Portrait">
+      </div>
+      <div class="bio-modal-content">
+        <div class="bio-modal-header-info">
+          <span class="sub" id="bio-modal-subtitle-node">Nail Specialist</span>
+          <h2 id="bio-modal-name-node">Livia</h2>
+        </div>
+        <p class="bio-modal-paragraph" id="bio-modal-paragraph-node">
+          Livia has over 6 years of experience...
+        </p>
+        <div class="bio-reviews-section">
+          <span class="bio-reviews-header">Guest Reviews</span>
+          <div id="bio-modal-reviews-list-node">
+            <!-- Reviews dynamically injected -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp Floating Pulsing Contact Button -->
+  <a href="https://wa.me/60123456789" class="whatsapp-float-btn" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- Main scripts engine booking dynamic elements -->
+  <script src="script.js"></script>
+
+</body>
+</html>
