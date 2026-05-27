@@ -389,8 +389,8 @@ textarea {
 }
 
 #splash-logo {
-  height: 200px;
-  width: 200px;
+  height: 280px;
+  width: 280px;
   border-radius: 50%;
   object-fit: cover;
   box-shadow: var(--shadow-md);
