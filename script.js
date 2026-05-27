@@ -5,8 +5,12 @@
   ════════════════════════════════════════
 */
 
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
+// Register GSAP plugins safely
+if (typeof ScrollTrigger !== 'undefined' && typeof TextPlugin !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger, TextPlugin);
+} else if (typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 // Google Apps Script Web App URL
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbx9hoE3zGi6vbw6wtU6OsmKNJOwFLAOYtUiUO_q1NH4BY1GM05F7YkF4f9GWeNWVa42sA/exec'; // Set your actual URL here
@@ -176,14 +180,25 @@ function initApp() {
   checkStoreLiveStatus();
   setInterval(checkStoreLiveStatus, 60000); // Check live status every minute
 
-  // sessionStorage Splash Screen check
+  // Safe sessionStorage check to prevent SecurityError crash on mobile private/embedded browsers
+  let splashSeen = false;
+  try {
+    splashSeen = sessionStorage.getItem('splashSeen');
+  } catch (e) {
+    console.warn("sessionStorage is blocked or disabled: ", e);
+  }
+
   const splash = document.getElementById('splash-screen');
-  if (sessionStorage.getItem('splashSeen')) {
+  if (splashSeen) {
     splash.style.display = 'none';
     showStep(1);
   } else {
     // Show splash screen, then fade out
-    sessionStorage.setItem('splashSeen', '1');
+    try {
+      sessionStorage.setItem('splashSeen', '1');
+    } catch (e) {
+      // ignore storage blocker
+    }
     gsap.from("#splash-logo", {
       scale: 0.8,
       opacity: 0,
@@ -369,18 +384,19 @@ function showStep(stepNumber) {
     // Refresh cart bindings and updates
     updateCartDisplay();
     
-    // Handle mobile floating buttons display states dynamically
-    const mobBasketBtn = document.getElementById('mobile-basket-btn-node');
-    const mobContinueBtn = document.getElementById('mobile-continue-btn-node');
-    
-    if (mobBasketBtn && mobContinueBtn) {
-      if (stepNumber >= 2 && stepNumber <= 4) {
-        mobBasketBtn.style.display = 'flex';
-        mobContinueBtn.style.display = 'flex';
-      } else {
-        mobBasketBtn.style.display = 'none';
-        mobContinueBtn.style.display = 'none';
-      }
+  }
+
+  // Handle mobile floating buttons display states globally for all steps!
+  const mobBasketBtn = document.getElementById('mobile-basket-btn-node');
+  const mobContinueBtn = document.getElementById('mobile-continue-btn-node');
+  
+  if (mobBasketBtn && mobContinueBtn) {
+    if (stepNumber >= 2 && stepNumber <= 4) {
+      mobBasketBtn.style.display = 'flex';
+      mobContinueBtn.style.display = 'flex';
+    } else {
+      mobBasketBtn.style.display = 'none';
+      mobContinueBtn.style.display = 'none';
     }
   }
 }
