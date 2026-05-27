@@ -368,6 +368,20 @@ function showStep(stepNumber) {
     
     // Refresh cart bindings and updates
     updateCartDisplay();
+    
+    // Handle mobile floating buttons display states dynamically
+    const mobBasketBtn = document.getElementById('mobile-basket-btn-node');
+    const mobContinueBtn = document.getElementById('mobile-continue-btn-node');
+    
+    if (mobBasketBtn && mobContinueBtn) {
+      if (stepNumber >= 2 && stepNumber <= 4) {
+        mobBasketBtn.style.display = 'flex';
+        mobContinueBtn.style.display = 'flex';
+      } else {
+        mobBasketBtn.style.display = 'none';
+        mobContinueBtn.style.display = 'none';
+      }
+    }
   }
 }
 
@@ -834,24 +848,46 @@ function updateCartDisplay() {
   const drawerTotalLabel = document.getElementById('mobile-drawer-total-label');
   const promoSectionNode = document.getElementById('cart-promo-input-section');
   const promoToggleLink = document.getElementById('promo-codes-toggle-link');
+  
+  // Floating round mobile navigation buttons & count badge references
+  const mobContinueBtn = document.getElementById('mobile-continue-btn-node');
+  const mobBadge = document.getElementById('mobile-basket-count-badge');
 
   if (!selectedItemsNode) return;
 
   const count = bookingState.selectedServices.length;
 
-  // Handle navigation activation buttons
+  // Handle navigation activation buttons based on the current step requirements
+  let canProceed = false;
+  const currentStep = bookingState.currentStep;
+  if (currentStep === 2) {
+    canProceed = count > 0;
+  } else if (currentStep === 3) {
+    canProceed = bookingState.selectedStaff !== null;
+  } else if (currentStep === 4) {
+    canProceed = bookingState.selectedDate !== null && bookingState.selectedTime !== null;
+  } else if (currentStep === 5) {
+    canProceed = true;
+  }
+
+  if (contNavBtn) contNavBtn.disabled = !canProceed;
+  if (mobStickyBtn) mobStickyBtn.disabled = !canProceed;
+  if (mobContinueBtn) mobContinueBtn.disabled = !canProceed;
+
   if (count > 0) {
-    contNavBtn.disabled = false;
-    mobStickyBtn.disabled = false;
-    promoSectionNode.style.display = 'block';
-    promoToggleLink.style.display = 'none';
+    if (promoSectionNode) promoSectionNode.style.display = 'block';
+    if (promoToggleLink) promoToggleLink.style.display = 'none';
   } else {
-    contNavBtn.disabled = true;
-    mobStickyBtn.disabled = true;
-    promoSectionNode.style.display = 'none';
-    promoToggleLink.style.display = 'block';
+    if (promoSectionNode) promoSectionNode.style.display = 'none';
+    if (promoToggleLink) promoToggleLink.style.display = 'block';
     bookingState.promoCode = '';
     bookingState.discountAmount = 0;
+  }
+
+  // Update mobile floating basket count badge
+  if (mobBadge) {
+    mobBadge.innerText = count;
+    mobBadge.style.display = count > 0 ? 'flex' : 'none';
   }
 
   // Calculate pricing sums
@@ -2123,4 +2159,3 @@ function closeBioPopoverModal() {
     }
   });
 }
-
