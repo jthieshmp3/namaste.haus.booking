@@ -102,7 +102,7 @@ const staff = [
     subtitle: 'Nail Specialist', 
     speciality: 'Gel, Manicure, Pedicure', 
     signature: 'Precision in every stroke.', 
-    photo: 'assets/staff-livia.jpg',
+    photo: 'staff-livia.jpg',
     bio: 'Livia has over 6 years of experience in luxury nail therapy. Specializing in precision gel work and advanced cuticle care, she is dedicated to maintaining the health and natural beauty of your nails.',
     reviews: [
       { stars: 5, text: 'Livia is incredibly precise! My gel nails lasted 4 weeks without a single chip!', author: 'Michelle W.' },
@@ -115,7 +115,7 @@ const staff = [
     subtitle: 'Nail Art Specialist', 
     speciality: 'Nail Art, Extensions', 
     signature: 'Where art meets your nails.', 
-    photo: 'assets/staff-deni.jpg',
+    photo: 'staff-deni.jpg',
     bio: "Deni is an artist at heart, bringing custom illustrations, hand-painted details, and avant-garde designs to your fingertips. With 5+ years of nail art engineering, she transforms nails into wearable art.",
     reviews: [
       { stars: 5, text: "A literal master of nail art. Deni can paint anything perfectly!", author: 'Rachel G.' },
@@ -128,7 +128,7 @@ const staff = [
     subtitle: 'Lash Specialist', 
     speciality: 'Lash Lift, Lash Extensions', 
     signature: 'Your comfort is my canvas.', 
-    photo: 'assets/staff-hannah.jpg',
+    photo: 'staff-hannah.jpg',
     bio: 'Hannah is a certified lash technician specializing in keratin lash lifts and high-retention classic natural extensions. She focuses on custom mapping to enhance your unique eye shape.',
     reviews: [
       { stars: 5, text: 'Hannah is so gentle, I fell asleep! My lash lift is gorgeous and lasted 6 weeks.', author: 'Priya S.' },
@@ -554,15 +554,15 @@ function renderServiceCards(categoryKey) {
     const buttonAddedClass = isSelected ? 'added' : '';
     
     // Assign thumbnail photo assets dynamically based on categories
-    let imageSrc = 'assets/photo-2.jpg';
-    if (srv.category === 'pedicure') imageSrc = 'assets/photo-3.jpg';
-    if (srv.category === 'lash' || srv.category === 'lashExtensions') imageSrc = 'assets/photo-4.jpg';
-    if (srv.category === 'extensions') imageSrc = 'assets/photo-5.jpg';
+    let imageSrc = 'photo-2.jpg';
+    if (srv.category === 'pedicure') imageSrc = 'photo-3.jpg';
+    if (srv.category === 'lash' || srv.category === 'lashExtensions') imageSrc = 'photo-4.jpg';
+    if (srv.category === 'extensions') imageSrc = 'photo-5.jpg';
     if (srv.category === 'featured' || srv.category === 'hotDeals') {
-      if (srv.id === 'promo-gel-mani-pedi' || srv.id === 'deal-promo-gel-mani-pedi') imageSrc = 'assets/photo-2.jpg';
-      if (srv.id === 'lash-gel-bundle' || srv.id === 'deal-lash-gel-bundle') imageSrc = 'assets/photo-4.jpg';
-      if (srv.id === 'xtips-lash-bundle' || srv.id === 'deal-gel-xtips-lash') imageSrc = 'assets/photo-5.jpg';
-      if (srv.id === 'wellness' || srv.id === 'deal-wellness') imageSrc = 'assets/photo-3.jpg';
+      if (srv.id === 'promo-gel-mani-pedi' || srv.id === 'deal-promo-gel-mani-pedi') imageSrc = 'photo-2.jpg';
+      if (srv.id === 'lash-gel-bundle' || srv.id === 'deal-lash-gel-bundle') imageSrc = 'photo-4.jpg';
+      if (srv.id === 'xtips-lash-bundle' || srv.id === 'deal-gel-xtips-lash') imageSrc = 'photo-5.jpg';
+      if (srv.id === 'wellness' || srv.id === 'deal-wellness') imageSrc = 'photo-3.jpg';
     }
 
     const card = document.createElement('div');
